@@ -16,7 +16,7 @@ function runIOstat(options) {
     var dataPos = data.indexOf("avg-cpu");
     
     if(dataPos > -1)
-      emitter.emit('data',toObject(data.substring(dataPos)));
+      emitter.emit('data', null, toObject(data.substring(dataPos)));
   });
 
   iostat.stderr.on('data', function (data) {
