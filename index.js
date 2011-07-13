@@ -2,7 +2,7 @@ var spawn = require('child_process').spawn,
     EventEmitter = require('events').EventEmitter;
 
 function runIOstat(options) {
-  options = options||['-m', '2', '-x'];
+  options = options||["-x"];
   process.env.LANG="en_US.utf8";//enforce en_US to avoid locale problem
   
   var emitter = new EventEmitter(),
