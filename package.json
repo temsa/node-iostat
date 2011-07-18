@@ -8,7 +8,7 @@
     "type": "git",  
     "url": "https://temsa@github.com/temsa/node-iostat.git"
   },
-  "main": "index.js"
+  "main": "index.js",
   "scripts": {
     "test": "vows test/*test.js"
   },
