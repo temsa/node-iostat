@@ -6,7 +6,7 @@
   "homepage": "http://github.com/temsa/node-iostat",
   "repository": {
     "type": "git",  
-    "url": "https://temsa@github.com/temsa/node-iostat.git"
+    "url": "https://github.com/temsa/node-iostat.git"
   },
   "main": "index.js",
   "scripts": {
