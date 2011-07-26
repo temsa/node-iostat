@@ -2,7 +2,7 @@
   "author": "Florian Traverse <florian.traverse@gmail.com> (http://pullrequest.org)",
   "name": "iostat",
   "description": "sysstat's iostat wrapper for monitoring i/o usage on a unix machine with iostat installed (package sysstat)",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "http://github.com/temsa/node-iostat",
   "repository": {
     "type": "git",  
