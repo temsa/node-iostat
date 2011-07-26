@@ -19,8 +19,8 @@ vows.describe('iostat').addBatch({
         }
     }
   }).addBatch({
-   'with ["-x","-m"] parameters': {
-        topic: function () {iostat(["-x","-m"]).on('data', this.callback);},
+   'with ["-x","-N","-m"] parameters': {
+        topic: function () {iostat(["-x","-N","-m"]).on('data', this.callback);},
         'we get no error, but an object': function (err, data) {
             assert.isNull   (err);
             assert.isObject (data);
@@ -36,10 +36,10 @@ vows.describe('iostat').addBatch({
         'and some devices': function (err, data) {
             assert.isObject (data.devices);
         },
-        'which have some stats themself': function (err, data) {
-            for (var device in data.devices) {
-                assert.isObject(device);
-                assert.isNumber (device["%util"]);
+        'which have some stats themselves': function (err, data) {
+            for (var key in data.devices) {
+                assert.isObject(data.devices[key]);
+                assert.isNumber(data.devices[key]["%util"]);
             }
         }
     }
