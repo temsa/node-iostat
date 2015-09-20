@@ -5,16 +5,18 @@
   "version": "0.2.2",
   "homepage": "http://github.com/temsa/node-iostat",
   "repository": {
-    "type": "git",  
+    "type": "git",
     "url": "https://github.com/temsa/node-iostat.git"
   },
   "main": "index.js",
   "scripts": {
-    "test": "node test/default-test.js"
+    "test": "node_modules/.bin/mocha"
   },
   "engines": {
     "node": ">=v0.4.0"
   },
-  "dependencies": {},
-  "devDependencies": {"vows":">=0.5.8"}
+  "devDependencies": {
+   "chai": "^3.2.0",
+   "mocha": "^2.3.2"
+  }
 }

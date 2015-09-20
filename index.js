@@ -4,17 +4,17 @@ var spawn = require('child_process').spawn,
 function runIOstat(options) {
   options = options||["-x", "-N"];
   process.env.LANG="en_US.utf8";//enforce en_US to avoid locale problem
-  
+
   var emitter = new EventEmitter(),
       iostat  = spawn('iostat', options, {env: process.env});
 
-  
+
   iostat.stdout.on('data', function (data) {
-    //console.log('stdout: ' + data);
+    console.log('stdout: ' + data);
     data = data.toString();
-    
+
     var dataPos = data.indexOf("avg-cpu");
-    
+
     if(dataPos > -1)
       emitter.emit('data', null, toObject(data.substring(dataPos)));
   });
@@ -30,7 +30,7 @@ function runIOstat(options) {
 
   function toObject(output) {
     var lines = output.split('\n');
-    
+
     //console.log(lines);
 
     var header, values;
@@ -41,16 +41,16 @@ function runIOstat(options) {
       if(fieldPos === -1) // => field not in string
         return NaN;
       var fieldEnd = header.indexOf(" ", fieldPos);
-      
+
       if(fieldEnd === -1) // no space => end of line
-        fieldEnd = header.length; 
+        fieldEnd = header.length;
       return Number(values.substring(fieldPos, fieldEnd));
-    } 
+    }
 
     var devices={}; //all stats will be stored here with for key the device name
-    
+
     header = lines[3];
-    
+
     lines.slice(4,-2).forEach(function extractPerDeviceStats(val){
       values = val;
       var key = values.substring(0, values.indexOf(" "));
@@ -69,12 +69,12 @@ function runIOstat(options) {
         "svctm": extractField('svctm'),
         "%util": extractField('%util')
       };
-      
+
     });
-    
+
     header = lines[0];
     values = lines[1];
-    
+
     return {//all values stored as an object for easy manipulation
             cpu:{
               "%user": extractField('%user'),
@@ -87,7 +87,7 @@ function runIOstat(options) {
             devices: devices
           };
   }
-  
+
   return emitter;
 }
 

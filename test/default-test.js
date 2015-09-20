@@ -1,46 +1,48 @@
-var vows = require("vows"),
-    assert = require("assert"),
+var should = require("chai").should(),
+    expect = require("chai").expect,
     iostat = require("../index");
 
-vows.describe('iostat').addBatch({
-   'by default': {
-        topic: function () {iostat().on('data', this.callback);},
-        'we get no error, but an object': function (err, data) {
-            assert.isNull   (err);
-            assert.isObject (data);
-        },
-        'with some information about the cpu i/o': function (err, data) {
-            assert.isObject (data.cpu);
-        },
-        'like the idle time percentage ': function (err, data) {
-            assert.isNumber (data.cpu['%idle']);
-            assert.isTrue (data.cpu['%idle']<=100);
-            assert.isTrue (data.cpu['%idle']>=0);
-        }
-    }
-  }).addBatch({
-   'with ["-x","-N","-m"] parameters': {
-        topic: function () {iostat(["-x","-N","-m"]).on('data', this.callback);},
-        'we get no error, but an object': function (err, data) {
-            assert.isNull   (err);
-            assert.isObject (data);
-        },
-        'with some information about the cpu i/o': function (err, data) {
-            assert.isObject (data.cpu);
-        },
-        'like the idle time percentage ': function (err, data) {
-            assert.isNumber (data.cpu['%idle']);
-            assert.isTrue (data.cpu['%idle']<=100);
-            assert.isTrue (data.cpu['%idle']>=0);
-        },
-        'and some devices': function (err, data) {
-            assert.isObject (data.devices);
-        },
-        'which have some stats themselves': function (err, data) {
-            for (var key in data.devices) {
-                assert.isObject(data.devices[key]);
-                assert.isNumber(data.devices[key]["%util"]);
-            }
-        }
-    }
-}).export(module);
+describe('iostat', function (){
+
+  describe('by default',function (done) {
+
+    it('should return no error, but an object with property cpu', function (done) {
+      iostat().on('data',function (err, data) {
+        if(err)
+          return done(err);
+
+        expect(data).not.to.be.null;
+        //data.should.be.an('object').to.include.keys('cpu')
+        data.should.be.an('object').with.property('cpu').which.is.an('object');
+
+        ['%user','%nice','%system','%iowait','%steal','%idle'].forEach(function(key) {
+          data.cpu[key].should.be.a('number').at.least(0).and.at.most(100)
+        })
+        done()
+      })
+    })
+
+  })
+
+  it('should, with ["-x","-N","-m"] parameters return no error but an object with property cpu, and devices with property %util', function(done) {
+    iostat(["-x","-N","-m"]).on('data', function(err, data) {
+      if(err)
+        return done(err);
+
+      expect(data).not.to.be.null;
+
+      data.should.be.an('object').with.deep.property('cpu.%idle').which.is.a('number').at.least(0).and.at.most(100)
+      data.should.be.an('object').with.property('devices').which.is.an('object')
+
+      Object.keys(data.devices).forEach(function(key) {
+        data.devices[key].should.be.an('object').with.property('%util').which.is.a('number').at.least(0).and.at.most(100)
+      })
+
+      done()
+    })
+  })
+
+})
+
+// .addBatch({
+// }).export(module);
